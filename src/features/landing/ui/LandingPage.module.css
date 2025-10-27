@@ -1,0 +1,667 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f4f6fb;
+  color: var(--color-text);
+}
+
+.hero {
+  position: relative;
+  background: radial-gradient(circle at 20% 20%, rgba(45, 109, 250, 0.25), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(14, 116, 144, 0.18), transparent 60%),
+    linear-gradient(135deg, #0f172a, #1e3a8a);
+  color: #fff;
+  padding-bottom: clamp(64px, 10vw, 120px);
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(18px);
+  background: rgba(15, 23, 42, 0.75);
+  padding: 12px clamp(24px, 5vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandLogo {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #fff;
+  padding: 3px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+}
+
+.brandText {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.navLinks {
+  display: flex;
+  gap: clamp(12px, 3vw, 32px);
+  align-items: center;
+  flex: 1;
+}
+
+.navLinks a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.navLinks a:hover {
+  color: #fff;
+}
+
+.heroBody {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(32px, 6vw, 80px);
+  padding: clamp(18px, 5vw, 54px) clamp(24px, 8vw, 96px) 0;
+}
+
+.heroCopy {
+  display: grid;
+  gap: 18px;
+  align-content: center;
+}
+
+.heroTagline {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.heroCopy h1 {
+  margin: 0;
+  font-size: clamp(2.8rem, 4vw, 3.8rem);
+  line-height: 1.02;
+}
+
+.heroDescription {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.05rem;
+  max-width: 560px;
+}
+
+.heroHighlights {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: grid;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.95rem;
+}
+
+.heroHighlights li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.heroHighlights li::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  display: inline-flex;
+}
+
+.heroActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.helperText {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.heroPreview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroPreviewImage {
+  width: min(420px, 100%);
+  border-radius: clamp(22px, 4vw, 34px);
+  box-shadow: 0 28px 55px rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  object-fit: cover;
+}
+
+.main {
+  display: grid;
+  gap: clamp(64px, 10vw, 96px);
+  padding: clamp(48px, 6vw, 80px) clamp(20px, 8vw, 96px);
+}
+
+.errorBanner {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+}
+
+.retryLink {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.impactSection {
+  display: grid;
+  gap: clamp(24px, 6vw, 48px);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: center;
+}
+
+.impactContent {
+  display: grid;
+  gap: clamp(16px, 3vw, 24px);
+}
+
+.impactContent h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+}
+
+.impactContent p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.impactStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(16px, 4vw, 32px);
+  margin-top: clamp(8px, 2vw, 18px);
+}
+
+.impactStats div {
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  padding: clamp(14px, 3vw, 18px) clamp(18px, 3vw, 22px);
+  min-width: 140px;
+}
+
+.impactValue {
+  display: block;
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.impactLabel {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.impactMedia img {
+  width: 100%;
+  border-radius: clamp(20px, 4vw, 32px);
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.4rem);
+}
+
+.sectionHeader p {
+  margin: 12px 0 0;
+  max-width: 600px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.campusSection {
+  display: grid;
+  gap: clamp(28px, 6vw, 48px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(233, 239, 255, 0.92));
+  padding: clamp(32px, 6vw, 52px);
+  border-radius: clamp(20px, 4vw, 32px);
+  box-shadow: 0 28px 65px rgba(15, 23, 42, 0.08);
+}
+
+.campusMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.campusMetrics div {
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: var(--radius-lg);
+  padding: clamp(16px, 3vw, 20px);
+  text-align: center;
+  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.12);
+}
+
+.campusMetrics span {
+  display: block;
+  font-size: clamp(1.6rem, 3vw, 1.9rem);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.campusMetrics p {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.schoolsGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.schoolCard,
+.schoolCardSkeleton {
+  position: relative;
+  border-radius: var(--radius-lg);
+  min-height: 230px;
+  overflow: hidden;
+  cursor: pointer;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.schoolCard {
+  background-size: cover;
+  background-position: center;
+}
+
+.schoolCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.75) 100%);
+  pointer-events: none;
+}
+
+.schoolCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+}
+
+.schoolCardSelected {
+  outline: 3px solid var(--color-primary);
+  box-shadow: 0 24px 48px rgba(30, 78, 216, 0.35);
+}
+
+.schoolOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  gap: 12px;
+  color: #fff;
+}
+
+.schoolBadge {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.schoolName {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.schoolAction {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.schoolCardSkeleton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface-muted);
+}
+
+.emptyState {
+  text-align: center;
+  gap: 8px;
+}
+
+.modulesSection {
+  display: grid;
+  gap: 28px;
+}
+
+.featureGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.featureCard {
+  display: grid;
+  gap: 12px;
+  padding: clamp(20px, 3vw, 28px);
+}
+
+.featureCard h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.featureCard p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.differentiatorsSection {
+  display: grid;
+  gap: clamp(24px, 6vw, 48px);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: center;
+  background: linear-gradient(135deg, rgba(30, 78, 216, 0.08), rgba(14, 116, 144, 0.12));
+  padding: clamp(32px, 6vw, 56px);
+  border-radius: clamp(18px, 3vw, 28px);
+}
+
+.differentiatorsHeader {
+  display: grid;
+  gap: 16px;
+}
+
+.differentiatorsHeader h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.4rem);
+}
+
+.differentiatorsHeader p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.differentiatorsGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.differentiatorCard {
+  display: grid;
+  gap: 12px;
+  padding: clamp(20px, 3vw, 26px);
+}
+
+.differentiatorCard h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.differentiatorCard p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.updatesSection {
+  display: grid;
+  gap: 24px;
+}
+
+.updatesList {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.updateCard {
+  display: grid;
+  gap: 10px;
+  padding: clamp(18px, 3vw, 24px);
+}
+
+.updateDate {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ctaSection {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(30, 64, 175, 0.85));
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: clamp(20px, 4vw, 32px);
+  padding: clamp(32px, 6vw, 48px);
+  display: grid;
+  gap: 18px;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.ctaSection h2 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 3vw, 2.4rem);
+}
+
+.ctaSection p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+}
+
+.ctaActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.updateCard h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.updateCard p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.footer {
+  background: linear-gradient(135deg, #0b1227, #1b2f63);
+  color: rgba(255, 255, 255, 0.92);
+  padding: clamp(48px, 6vw, 72px) clamp(24px, 8vw, 96px);
+}
+
+.footerShell {
+  display: grid;
+  gap: clamp(24px, 4vw, 36px);
+}
+
+.footerBrand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.footerBadge {
+  height: 56px;
+  width: 56px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 14px 24px rgba(15, 23, 42, 0.25);
+}
+
+.footerBadge img {
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+}
+
+.footerBrand h2 {
+  margin: 0 0 6px;
+  font-size: clamp(1.7rem, 3vw, 2.1rem);
+}
+
+.footerBrand p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.76);
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+.footerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footerColumns {
+  display: grid;
+  gap: clamp(18px, 3vw, 28px);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.footerList h3,
+.footerContact {
+  display: grid;
+  gap: 12px;
+}
+
+.footerBottom {
+  margin-top: clamp(24px, 4vw, 32px);
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  padding-top: 18px;
+  font-size: 0.85rem;
+  color: rgba(203, 213, 225, 0.75);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .navLinks {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .heroBody {
+    padding-top: 32px;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footerTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footerBottom {
+    text-align: left;
+  }
+}
+
+
+.schoolCardPlaceholder {
+  flex: 0 0 320px;
+  width: 320px;
+  visibility: hidden;
+}
+
+
+
+
+.partnerActionsBanner {
+  background: linear-gradient(135deg, rgba(30, 78, 216, 0.1), rgba(14, 116, 144, 0.15));
+  border-radius: clamp(18px, 3vw, 28px);
+  padding: clamp(22px, 5vw, 32px);
+  display: grid;
+  gap: clamp(16px, 4vw, 24px);
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.partnerActionsBanner h3 {
+  margin: 0 0 8px;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+}
+
+.partnerActionsBanner p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.partnerActions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+
+

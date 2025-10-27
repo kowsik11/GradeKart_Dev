@@ -1,0 +1,27 @@
+.alert {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid transparent;
+}
+
+.info {
+  background: rgba(30, 78, 216, 0.08);
+  border-color: rgba(30, 78, 216, 0.15);
+  color: var(--color-primary);
+}
+
+.success {
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.2);
+  color: var(--color-success);
+}
+
+.error {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.2);
+  color: var(--color-danger);
+}
