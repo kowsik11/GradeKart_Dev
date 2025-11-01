@@ -4,8 +4,9 @@
 
 Here are some glimpses of GradeKart in action:
 
-![GradeKart Screenshot 1](photos/ref_1.png)
 ![GradeKart Screenshot 2](photos/ref_2.png)
+![GradeKart Screenshot 1](photos/ref_1.png)
+
 
 GradeKart is a cutting-edge academic operating system meticulously designed to streamline every facet of educational management. From attendance and academics to fees, hostels, events, counselling, and communication, GradeKart provides a unified, intuitive platform. With purpose-built dashboards and a robust, secure backend, GradeKart eliminates operational friction, fostering an elevated experience for students, faculty, heads, and owners alike.
 

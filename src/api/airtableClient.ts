@@ -42,6 +42,15 @@ interface TeacherFields {
   department?: string
 }
 
+interface ParentFields {
+  school_id?: string
+  student_roll_no: string
+  password: string
+  parent_name?: string
+  email?: string
+  phone?: string
+}
+
 interface StudentAttendanceFields {
   school_id?: string
   student_roll_no: string
@@ -88,6 +97,15 @@ export type TeacherRecord = {
   email: string
   fullName?: string
   department?: string
+}
+
+export type ParentRecord = {
+  id: string
+  schoolCode: string
+  studentRollNo: string
+  parentName?: string
+  email?: string
+  phone?: string
 }
 
 export type SchoolRecord = {
@@ -191,6 +209,17 @@ function mapTeacher(record: AirtableRecord<TeacherFields>): TeacherRecord {
     email: record.fields.email,
     fullName: record.fields.full_name,
     department: record.fields.department,
+  }
+}
+
+function mapParent(record: AirtableRecord<ParentFields>): ParentRecord {
+  return {
+    id: record.id,
+    schoolCode: record.fields.school_id ?? '',
+    studentRollNo: record.fields.student_roll_no,
+    parentName: record.fields.parent_name,
+    email: record.fields.email,
+    phone: record.fields.phone,
   }
 }
 
@@ -298,6 +327,36 @@ export async function loginTeacher(
   return mapTeacher(record)
 }
 
+export async function loginParent(
+  studentRollNo: string,
+  password: string,
+  schoolCode?: string,
+) {
+  const formula = `AND({student_roll_no}='${escapeValue(
+    studentRollNo,
+  )}',{password}='${escapeValue(password)}')`
+  const data = await airtableRequest<AirtableListResponse<ParentFields>>(
+    `Parents?filterByFormula=${encodeURIComponent(formula)}&maxRecords=1`,
+  )
+
+  const record = data.records[0]
+  if (!record) {
+    throw new Error('Invalid parent credentials. Please try again.')
+  }
+
+  if (
+    schoolCode &&
+    record.fields.school_id &&
+    record.fields.school_id !== schoolCode
+  ) {
+    throw new Error(
+      'This parent account belongs to a different campus. Please switch campus.',
+    )
+  }
+
+  return mapParent(record)
+}
+
 export async function signupStudent({
   rollNo,
   password,
@@ -372,6 +431,51 @@ export async function signupTeacher({
   return mapTeacher(record)
 }
 
+export async function signupParent({
+  studentRollNo,
+  password,
+  parentName,
+  email,
+  phone,
+  schoolCode,
+}: {
+  studentRollNo: string
+  password: string
+  parentName?: string
+  email?: string
+  phone?: string
+  schoolCode?: string
+}) {
+  const existing = await findParentByStudentRoll(studentRollNo, schoolCode)
+  if (existing) {
+    throw new Error(
+      'A parent/guardian account already exists for this student register number.',
+    )
+  }
+
+  const payload: ParentFields = {
+    student_roll_no: studentRollNo,
+    password,
+    parent_name: parentName,
+    email,
+    phone,
+  }
+
+  if (schoolCode) {
+    payload.school_id = schoolCode
+  }
+
+  const record = await airtableRequest<AirtableRecord<ParentFields>>(
+    'Parents',
+    {
+      method: 'POST',
+      body: JSON.stringify({ fields: payload }),
+    },
+  )
+
+  return mapParent(record)
+}
+
 async function findStudentByRoll(rollNo: string, schoolCode?: string) {
   const formula = `{roll_no}='${escapeValue(rollNo)}'`
   const data = await airtableRequest<AirtableListResponse<StudentFields>>(
@@ -396,6 +500,22 @@ async function findTeacherByEmail(email: string, schoolCode?: string) {
       : true,
   )
   return record ? mapTeacher(record) : null
+}
+
+async function findParentByStudentRoll(
+  studentRollNo: string,
+  schoolCode?: string,
+) {
+  const formula = `{student_roll_no}='${escapeValue(studentRollNo)}'`
+  const data = await airtableRequest<AirtableListResponse<ParentFields>>(
+    `Parents?filterByFormula=${encodeURIComponent(formula)}&maxRecords=1`,
+  )
+  const record = data.records.find((entry) =>
+    schoolCode && entry.fields.school_id
+      ? entry.fields.school_id === schoolCode
+      : true,
+  )
+  return record ? mapParent(record) : null
 }
 
 export async function fetchStudentAttendance(
@@ -476,28 +596,43 @@ export async function signup({
   fullName?: string
   schoolCode?: string
 }) {
-  if (role === 'student') {
-    if (!payload.rollNo) {
-      throw new Error('Roll number is required for student signup.')
+  switch (role) {
+    case 'student': {
+      if (!payload.rollNo) {
+        throw new Error('Register number is required for student signup.')
+      }
+      return signupStudent({
+        rollNo: payload.rollNo,
+        password: payload.password,
+        fullName: payload.fullName,
+        schoolCode: payload.schoolCode,
+      })
     }
-    return signupStudent({
-      rollNo: payload.rollNo,
-      password: payload.password,
-      fullName: payload.fullName,
-      schoolCode: payload.schoolCode,
-    })
+    case 'parent': {
+      if (!payload.rollNo) {
+        throw new Error(
+          'Student register number is required for parent signup.',
+        )
+      }
+      return signupParent({
+        studentRollNo: payload.rollNo,
+        password: payload.password,
+        parentName: payload.fullName,
+        schoolCode: payload.schoolCode,
+      })
+    }
+    default: {
+      if (!payload.email) {
+        throw new Error('Email is required for faculty signup.')
+      }
+      return signupTeacher({
+        email: payload.email,
+        password: payload.password,
+        fullName: payload.fullName,
+        schoolCode: payload.schoolCode,
+      })
+    }
   }
-
-  if (!payload.email) {
-    throw new Error('Email is required for faculty signup.')
-  }
-
-  return signupTeacher({
-    email: payload.email,
-    password: payload.password,
-    fullName: payload.fullName,
-    schoolCode: payload.schoolCode,
-  })
 }
 
 export async function fetchSchools(): Promise<SchoolRecord[]> {

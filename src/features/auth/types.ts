@@ -1,4 +1,4 @@
-export type AuthRole = 'student' | 'teacher'
+export type AuthRole = 'student' | 'teacher' | 'accounts' | 'head' | 'parent'
 export type AuthStage = 'login' | 'signup'
 
 export interface AuthMode {

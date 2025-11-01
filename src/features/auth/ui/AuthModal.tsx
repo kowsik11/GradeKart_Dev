@@ -8,11 +8,15 @@ import {
   AuthStage,
 } from '../types'
 import type { SchoolSummary } from '@/features/schools'
+import { generateRegisterNumber } from '@/features/auth/utils'
 import styles from './AuthModal.module.css'
 
 const roleOptions = [
   { label: 'Student', value: 'student' as const },
   { label: 'Teacher', value: 'teacher' as const },
+  { label: 'Parent', value: 'parent' as const },
+  { label: 'Accounts', value: 'accounts' as const },
+  { label: 'School Head', value: 'head' as const },
 ]
 
 const stageOptions = [
@@ -22,7 +26,10 @@ const stageOptions = [
 
 const identifierCopy: Record<AuthRole, string> = {
   student: 'Roll Number',
+  parent: 'Student Register Number',
   teacher: 'Email Address',
+  accounts: 'Accounts ID',
+  head: 'Head Access ID',
 }
 
 export interface AuthModalProps {
@@ -54,11 +61,13 @@ export function AuthModal({
     password: '',
     fullName: '',
   })
+  const [generatedId, setGeneratedId] = useState<string | null>(null)
 
   useEffect(() => {
     if (open) {
       setMode(initialMode)
       setFormState({ identifier: '', password: '', fullName: '' })
+      setGeneratedId(null)
     }
   }, [initialMode, open])
 
@@ -76,23 +85,57 @@ export function AuthModal({
         ? 'Access your attendance and marks dashboard.'
         : 'Create your student account using your roll number.'
     }
+
+    if (mode.role === 'teacher') {
+      return mode.stage === 'login'
+        ? 'View attendance logs, assessments, and mentoring notes.'
+        : 'Create your faculty account with your institutional email.'
+    }
+
+    if (mode.role === 'parent') {
+      return mode.stage === 'login'
+        ? 'Stay in sync with your child’s attendance, marks, and fee reminders.'
+        : 'Register as a parent/guardian using your child’s register number.'
+    }
+
+    if (mode.role === 'accounts') {
+      return mode.stage === 'login'
+        ? 'Manage fee collections, dues, and finance reports.'
+        : 'Accounts access is provisioned by the leadership team.'
+    }
+
     return mode.stage === 'login'
-      ? 'View attendance logs and performance reviews.'
-      : 'Create your faculty account with your institutional email.'
+      ? 'Oversee staff, classes, finances, and discipline across the campus.'
+      : 'Leadership access is issued by the GradeKart operations team.'
   }, [mode.role, mode.stage])
 
   const handleStageChange = (stage: AuthStage) => {
     setMode((prev) => ({ ...prev, stage }))
+    setGeneratedId(null)
   }
 
   const handleRoleChange = (role: AuthRole) => {
     setMode((prev) => ({ ...prev, role }))
+    setGeneratedId(null)
+  }
+
+  const handleGenerateIdentifier = () => {
+    const generated = generateRegisterNumber(school)
+    setFormState((prev) => ({
+      ...prev,
+      identifier: generated,
+    }))
+    setGeneratedId(generated)
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const identifierValue =
+      mode.role === 'student' || mode.role === 'parent'
+        ? formState.identifier.trim().toUpperCase()
+        : formState.identifier.trim()
     const payload: AuthCredentials = {
-      identifier: formState.identifier.trim(),
+      identifier: identifierValue,
       password: formState.password.trim(),
       fullName: formState.fullName?.trim() || undefined,
     }
@@ -115,7 +158,15 @@ export function AuthModal({
     >
       <div className={styles.content}>
         <div className={styles.modeControls}>
-          <h3>{mode.role === 'student' ? 'Student Access' : 'Faculty Access'}</h3>
+          <h3>
+            {mode.role === 'student'
+              ? 'Student Access'
+              : mode.role === 'teacher'
+                ? 'Faculty Access'
+                : mode.role === 'accounts'
+                  ? 'Accounts Desk Access'
+                  : 'Leadership Access'}
+          </h3>
           <div className={styles.stageSwitch}>
             <ToggleSwitch
               aria-label="Select authentication stage"
@@ -153,8 +204,14 @@ export function AuthModal({
               label={identifierCopy[mode.role]}
               placeholder={
                 mode.role === 'student'
-                  ? 'e.g. R101'
-                  : 'e.g. abc@school.com'
+                  ? 'e.g. GK2025-001'
+                  : mode.role === 'parent'
+                    ? 'e.g. GK2025-001'
+                    : mode.role === 'accounts'
+                    ? 'e.g. account'
+                    : mode.role === 'head'
+                      ? 'e.g. chief'
+                      : 'e.g. abc@school.com'
               }
               value={formState.identifier}
               onChange={(event) =>
@@ -165,6 +222,22 @@ export function AuthModal({
               }
               required
             />
+            {mode.stage === 'signup' && (mode.role === 'student' || mode.role === 'parent') ? (
+              <div className={styles.inlineHelper}>
+                <button
+                  type="button"
+                  className={styles.generateButton}
+                  onClick={handleGenerateIdentifier}
+                >
+                  Generate register number
+                </button>
+                <p className={styles.helper}>
+                  {generatedId
+                    ? `Generated ID ${generatedId}. Share this with the guardian for login.`
+                    : 'Don’t have a register number yet? Generate one instantly.'}
+                </p>
+              </div>
+            ) : null}
 
             {mode.stage === 'signup' ? (
               <Input
@@ -172,7 +245,11 @@ export function AuthModal({
                 placeholder={
                   mode.role === 'student'
                     ? 'Student full name (optional)'
-                    : 'Faculty full name (optional)'
+                    : mode.role === 'teacher'
+                      ? 'Faculty full name (optional)'
+                      : mode.role === 'parent'
+                        ? 'Parent / Guardian name (optional)'
+                      : 'Full name (optional)'
                 }
                 value={formState.fullName}
                 onChange={(event) =>
@@ -203,7 +280,15 @@ export function AuthModal({
             <p className={styles.submitNote}>
               {mode.stage === 'login'
                 ? 'Forgot credentials? Contact your administrator.'
-                : 'Passwords sync directly to Airtable for this prototype.'}
+                : mode.role === 'student'
+                  ? 'New register numbers are written to Airtable automatically during signup.'
+                  : mode.role === 'teacher'
+                    ? 'Faculty accounts sync directly with the Teachers table in Airtable.'
+                    : mode.role === 'parent'
+                      ? 'Each parent account links to exactly one student register number.'
+                      : mode.role === 'accounts'
+                        ? 'Accounts access is provisioned by the leadership team.'
+                        : 'Leadership access is issued by the GradeKart operations team.'}
             </p>
             <div className={cn(styles.actions)}>
               <Button

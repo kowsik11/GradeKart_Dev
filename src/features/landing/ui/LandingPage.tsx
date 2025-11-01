@@ -283,9 +283,9 @@ export function LandingPage({ onSignIn, onSignUp }: LandingPageProps) {
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => onSignUp('teacher')}
+                onClick={() => handlePortalAction('parent', 'signin')}
               >
-                Become a Partner
+                Parent Portal
               </Button>
             </div>
             {helperMessage ? (
@@ -441,6 +441,12 @@ export function LandingPage({ onSignIn, onSignUp }: LandingPageProps) {
           </div>
           <div className={styles.ctaActions}>
             <Button onClick={() => handlePortalAction('teacher', 'signup')}>Start as Faculty</Button>
+            <Button
+              variant="secondary"
+              onClick={() => handlePortalAction('parent', 'signin')}
+            >
+              Parent Login
+            </Button>
             <Button
               variant="secondary"
               onClick={() => window.open('mailto:hello@gradekart.app?subject=Partner%20with%20GradeKart', '_blank')}

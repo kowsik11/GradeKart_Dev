@@ -42,6 +42,7 @@ import {
 import { StudentProfilePage } from '@/routes/student/profile/ProfilePage'
 import { ProgramExitSurveyPage } from '@/routes/student/program-exit/ProgramExitSurveyPage'
 import { TimetablePage } from '@/routes/student/timetables/TimetablePage'
+import { StudentFeePaymentCheckoutPage } from '@/routes/student/fees/FeePaymentCheckoutPage'
 
 const studentNavItems: DashboardNavItem[] = [
   {
@@ -336,6 +337,7 @@ export function StudentDashboardPage() {
           <Route path="transportation" element={<ViewTransportationFeePage />} />
           <Route path="dues" element={<ViewDuesPage />} />
           <Route path="all" element={<ViewAllFeesPage />} />
+          <Route path="pay" element={<StudentFeePaymentCheckoutPage />} />
           <Route index element={<Navigate to="details" replace />} />
         </Route>
         <Route path="hostel" element={<HostelManagementPage />} />

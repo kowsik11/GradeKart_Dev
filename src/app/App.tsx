@@ -44,6 +44,18 @@ export function App() {
         navigate('/student', { replace: true })
         return
       }
+      if (role === 'parent') {
+        navigate('/parent', { replace: true })
+        return
+      }
+      if (role === 'accounts') {
+        navigate('/accounts', { replace: true })
+        return
+      }
+      if (role === 'head') {
+        navigate('/head', { replace: true })
+        return
+      }
       navigate('/teacher', { replace: true })
     },
     [navigate],
@@ -65,9 +77,9 @@ export function App() {
       setErrorMessage(null)
       setFeedbackMessage(null)
       try {
-        await login(role, credentials)
+        const nextSession = await login(role, credentials)
         closeAuthModal()
-        navigateToRoleHome(role)
+        navigateToRoleHome(nextSession.role)
       } catch (error) {
         setErrorMessage(error instanceof Error ? error.message : String(error))
       } finally {
@@ -117,6 +129,10 @@ export function App() {
         onStudentSignUp={() => handleSignUpClick('student')}
         onTeacherSignIn={() => handleSignInClick('teacher')}
         onTeacherSignUp={() => handleSignUpClick('teacher')}
+        onParentSignIn={() => handleSignInClick('parent')}
+        onParentSignUp={() => handleSignUpClick('parent')}
+        onAccountsSignIn={() => handleSignInClick('accounts')}
+        onHeadSignIn={() => handleSignInClick('head')}
       />
       <AuthModal
         open={authModalOpen}

@@ -1,3 +1,4 @@
+import { useAuth } from '@/features/auth'
 import { FeeFiltersLayout } from '@/routes/student/fees/FeeFiltersLayout'
 import { FeeResultsSection } from '@/routes/student/fees/FeeResultsSection'
 import { feeRecords, type FeeCategory } from '@/routes/student/fees/data'
@@ -17,6 +18,7 @@ function filterByCategory(categories: FeeCategory[], { cycle }: FilterArgs) {
 }
 
 export function ViewFeeDetailsPage() {
+  const { rollNo, fullName } = useStudentIdentity()
   return (
     <FeeFiltersLayout
       heading="View Fee Details"
@@ -25,7 +27,7 @@ export function ViewFeeDetailsPage() {
       renderResults={({ cycle }) => {
         const records = filterByCategory(
           ['tuition', 'sports', 'hostel', 'college', 'transport', 'details', 'dues'],
-          { cycle }
+          { cycle },
         )
         return (
           <FeeResultsSection
@@ -33,6 +35,9 @@ export function ViewFeeDetailsPage() {
             subtitle="All fee components and add-on services captured for the current cohort."
             records={records}
             emptyMessage="No fee statements found for the selected filters."
+            studentRollNo={rollNo}
+            studentName={fullName}
+            paymentRedirectPath="/student/fees/pay"
           />
         )
       }}
@@ -41,6 +46,7 @@ export function ViewFeeDetailsPage() {
 }
 
 export function ViewSportsFeesPage() {
+  const { rollNo, fullName } = useStudentIdentity()
   return (
     <FeeFiltersLayout
       heading="View Sports Fees"
@@ -54,6 +60,9 @@ export function ViewSportsFeesPage() {
             subtitle="Athletics, aquatics, and extracurricular sport activities."
             records={records}
             emptyMessage="No sports fees recorded for the selected cycle."
+            studentRollNo={rollNo}
+            studentName={fullName}
+            paymentRedirectPath="/student/fees/pay"
           />
         )
       }}
@@ -62,6 +71,7 @@ export function ViewSportsFeesPage() {
 }
 
 export function ViewTuitionFeePage() {
+  const { rollNo, fullName } = useStudentIdentity()
   return (
     <FeeFiltersLayout
       heading="View Tuition Fee"
@@ -75,6 +85,9 @@ export function ViewTuitionFeePage() {
             subtitle="Core academic fee split across billing cycles."
             records={records}
             emptyMessage="No tuition statements available for the chosen filters."
+            studentRollNo={rollNo}
+            studentName={fullName}
+            paymentRedirectPath="/student/fees/pay"
           />
         )
       }}
@@ -83,6 +96,7 @@ export function ViewTuitionFeePage() {
 }
 
 export function ViewHostelFeePage() {
+  const { rollNo, fullName } = useStudentIdentity()
   return (
     <FeeFiltersLayout
       heading="View Hostel Fee"
@@ -96,6 +110,9 @@ export function ViewHostelFeePage() {
             subtitle="Charges for hostel stay, including boarding amenities."
             records={records}
             emptyMessage="No hostel fee statements for the selected cycle."
+            studentRollNo={rollNo}
+            studentName={fullName}
+            paymentRedirectPath="/student/fees/pay"
           />
         )
       }}
@@ -104,6 +121,7 @@ export function ViewHostelFeePage() {
 }
 
 export function ViewCollegeFeePage() {
+  const { rollNo, fullName } = useStudentIdentity()
   return (
     <FeeFiltersLayout
       heading="View College Fee"
@@ -117,6 +135,9 @@ export function ViewCollegeFeePage() {
             subtitle="Development funds, academic associations, and student services."
             records={records}
             emptyMessage="No college-level contributions found for this selection."
+            studentRollNo={rollNo}
+            studentName={fullName}
+            paymentRedirectPath="/student/fees/pay"
           />
         )
       }}
@@ -125,6 +146,7 @@ export function ViewCollegeFeePage() {
 }
 
 export function ViewTransportationFeePage() {
+  const { rollNo, fullName } = useStudentIdentity()
   return (
     <FeeFiltersLayout
       heading="View Transportation"
@@ -138,6 +160,9 @@ export function ViewTransportationFeePage() {
             subtitle="Shuttle and bus services allocated per billing cycle."
             records={records}
             emptyMessage="No transport fees recorded for the selected cycle."
+            studentRollNo={rollNo}
+            studentName={fullName}
+            paymentRedirectPath="/student/fees/pay"
           />
         )
       }}
@@ -146,22 +171,27 @@ export function ViewTransportationFeePage() {
 }
 
 export function ViewDuesPage() {
+  const { rollNo, fullName } = useStudentIdentity()
   return (
     <FeeFiltersLayout
       heading="View Dues"
       description="Outstanding or partially paid invoices that need your attention."
       badgeLabel="Pending items"
       renderResults={({ cycle }) => {
-        const records = filterByCategory(['tuition', 'sports', 'hostel', 'transport', 'dues', 'details'], {
-          cycle,
-        }).filter((record) => record.status !== 'Paid')
+        const records = filterByCategory(
+          ['tuition', 'sports', 'hostel', 'transport', 'dues', 'details'],
+          { cycle },
+        ).filter((record) => record.status !== 'Paid')
 
         return (
           <FeeResultsSection
             title="Pending statements"
             subtitle="All dues consolidated across services."
             records={records}
-            emptyMessage="Great news — there are no dues for this selection."
+            emptyMessage="Great news - there are no dues for this selection."
+            studentRollNo={rollNo}
+            studentName={fullName}
+            paymentRedirectPath="/student/fees/pay"
           />
         )
       }}
@@ -170,6 +200,7 @@ export function ViewDuesPage() {
 }
 
 export function ViewAllFeesPage() {
+  const { rollNo, fullName } = useStudentIdentity()
   return (
     <FeeFiltersLayout
       heading="View All"
@@ -178,7 +209,7 @@ export function ViewAllFeesPage() {
       renderResults={({ cycle }) => {
         const records = filterByCategory(
           ['tuition', 'sports', 'hostel', 'college', 'transport', 'details', 'dues'],
-          { cycle }
+          { cycle },
         )
         return (
           <FeeResultsSection
@@ -186,9 +217,23 @@ export function ViewAllFeesPage() {
             subtitle="Comprehensive record of due and collected amounts."
             records={records}
             emptyMessage="No fee records available. Adjust filters to search another cycle."
+            studentRollNo={rollNo}
+            studentName={fullName}
+            paymentRedirectPath="/student/fees/pay"
           />
         )
       }}
     />
   )
+}
+
+function useStudentIdentity() {
+  const { session } = useAuth()
+  if (session?.role === 'student') {
+    return {
+      rollNo: session.profile.rollNo,
+      fullName: session.profile.fullName ?? 'Student',
+    }
+  }
+  return { rollNo: 'GK2025-001', fullName: 'Student' }
 }

@@ -1,10 +1,14 @@
 import type { FeeRecord } from '@/routes/student/fees/data'
+import { PayOutstandingButton } from '@/routes/student/fees/PayOutstandingButton'
 
 interface FeeResultsSectionProps {
   title: string
   subtitle?: string
   records: FeeRecord[]
   emptyMessage: string
+  studentRollNo?: string
+  studentName?: string
+  paymentRedirectPath: string
 }
 
 const currencyFormatter = new Intl.NumberFormat('en-IN', {
@@ -18,6 +22,9 @@ export function FeeResultsSection({
   subtitle,
   records,
   emptyMessage,
+  studentRollNo = 'GK2025-001',
+  studentName = 'Student',
+  paymentRedirectPath,
 }: FeeResultsSectionProps) {
   const totals = calculateTotals(records)
 
@@ -55,6 +62,7 @@ export function FeeResultsSection({
                 <th className="px-6 py-4 font-semibold text-center">Outstanding</th>
                 <th className="px-6 py-4 font-semibold text-center">Status</th>
                 <th className="px-6 py-4 font-semibold">Due date</th>
+                <th className="px-6 py-4 font-semibold text-center">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white text-slate-700">
@@ -77,6 +85,14 @@ export function FeeResultsSection({
                       <StatusBadge status={row.status} />
                     </td>
                     <td className="px-6 py-4">{formatDate(row.dueDate)}</td>
+                    <td className="px-6 py-4 text-center">
+                      <PayOutstandingButton
+                        record={row}
+                        studentRollNo={studentRollNo}
+                        studentName={studentName}
+                        redirectPath={paymentRedirectPath}
+                      />
+                    </td>
                   </tr>
                 )
               })}
@@ -119,8 +135,8 @@ function SummaryPill({
 }) {
   const toneClasses: Record<typeof tone, string> = {
     slate: 'bg-slate-900 text-white',
-    emerald: 'bg-emerald-500/10 text-emerald-600 border border-emerald-100',
-    amber: 'bg-amber-50 text-amber-600 border border-amber-100',
+    emerald: 'bg-emerald-600/15 text-emerald-700 border border-emerald-200',
+    amber: 'bg-amber-500/15 text-amber-700 border border-amber-200',
   }
 
   return (
